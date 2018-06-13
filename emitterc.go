@@ -1203,6 +1203,23 @@ func yaml_emitter_write_indent(emitter *yaml_emitter_t) bool {
 	if indent < 0 {
 		indent = 0
 	}
+	if emitter.comments != nil && emitter.indent >= 0 {
+		if con, ok := emitter.comments[string(emitter.scalar_data.value)]; ok == true {
+			if !emitter.indention || emitter.column > indent || (emitter.column == indent && !emitter.whitespace) {
+				if !put_break(emitter) {
+					return false
+				}
+			}
+			for emitter.column < indent {
+				if !put(emitter, ' ') {
+					return false
+				}
+			}
+			if !write_all(emitter, []byte("# "+con)) {
+				return false
+			}
+		}
+	}
 	if !emitter.indention || emitter.column > indent || (emitter.column == indent && !emitter.whitespace) {
 		if !put_break(emitter) {
 			return false

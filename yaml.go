@@ -206,6 +206,18 @@ func Marshal(in interface{}) (out []byte, err error) {
 	return
 }
 
+// MarshalWithComments are the same as Marshal, in addition to support comments writing.
+func MarshalWithComments(in interface{}, comments map[string]string) (out []byte, err error) {
+	defer handleErr(&err)
+	e := newEncoder()
+	defer e.destroy()
+	e.emitter.comments = comments
+	e.marshalDoc("", reflect.ValueOf(in))
+	e.finish()
+	out = e.out
+	return
+}
+
 // An Encoder writes YAML values to an output stream.
 type Encoder struct {
 	encoder *encoder

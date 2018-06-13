@@ -735,4 +735,7 @@ type yaml_emitter_t struct {
 	last_anchor_id int // The last assigned anchor id.
 
 	document *yaml_document_t // The currently emitted document.
+
+	// Comments
+	comments map[string]string
 }
